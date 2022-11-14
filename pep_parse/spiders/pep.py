@@ -26,5 +26,5 @@ class PepSpider(scrapy.Spider):
             'number': number.replace('PEP ', ''),
             'name': name,
             'status': status,
-         }
+        }
         yield PepParseItem(data)
