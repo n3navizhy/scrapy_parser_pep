@@ -1,11 +1,12 @@
 import collections
 import csv
 import datetime
-
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
+FILE_DIR = 'results'
 DATE_MASK = "%Y-%m-%d_%H-%M-%S"
+PEP_FILE = FILE_DIR + '/pep_%(time)s.csv'
 
 
 class PepParsePipeline:
@@ -19,17 +20,14 @@ class PepParsePipeline:
         return item
 
     def close_spider(self, spider):
-        result_path = BASE_DIR / 'results'
+        result_path = BASE_DIR / FILE_DIR
         result_path.mkdir(exist_ok=True)
         now_time = datetime.datetime.now().strftime(DATE_MASK)
-        name_file = f'status_summary_{now_time}.csv'
-        file_path = result_path / name_file
-        results = ['Статус,Количество']
+        file_path = result_path / f'status_summary_{now_time}.csv'
         with open(file_path, mode='w', encoding='utf-8') as f:
             csv_writer = csv.writer(f, dialect=csv.unix_dialect)
-            total = sum(self.pep_sum.values())
             csv_writer.writerows([
-                results,
+                [('Статус'), ('Количество')],
                 *self.pep_sum.items(),
-                ['Total', total]
+                ['Total', sum(self.pep_sum.values())]
             ])
