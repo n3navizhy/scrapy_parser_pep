@@ -1,8 +1,4 @@
-
-
 from scrapy import signals
-
-
 
 
 class PepParseSpiderMiddleware:
